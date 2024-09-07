@@ -1,0 +1,36 @@
+name: Next.js CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.7.0'
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # TypeScript type check
+      - name: Run TypeScript type check
+        run: npm run type-check
+
+      # Build project
+      - name: Build project
+        run: npm run build
