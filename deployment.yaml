@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whoflopped-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: whoflopped
+  template:
+    metadata:
+      labels:
+        app: whoflopped
+    spec:
+      containers:
+        - name: whoflopped-app
+          image: whoflopped-app:latest
+          ports:
+            - containerPort: 3000
