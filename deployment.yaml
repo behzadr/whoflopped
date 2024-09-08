@@ -15,5 +15,6 @@ spec:
       containers:
         - name: whoflopped-app
           image: whoflopped-app:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 3000
