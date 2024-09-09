@@ -42,20 +42,4 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/whoflopped-app:latest
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Set up Kubernetes kubeconfig
-        run: |
-          echo "${{ secrets.KUBE_CONFIG }}" > $HOME/.kube/config
-
-      - name: Set kubectl context
-        run: |
-          kubectl config use-context ${{ secrets.KUBE_CONTEXT }}
-
-      - name: Update Kubernetes deployment
-        run: |
-          kubectl set image deployment/whoflopped-deployment nextjs-app=behzadr/whoflopped-app:latest
+          
