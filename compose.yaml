@@ -6,19 +6,16 @@ services:
     ports:
       - "3000:3000"
     environment:
-      NODE_ENV: development
-    develop:
-      watch:
-        - action: sync
-          path: ./src
-          target: /app/src
-          ignore:
-            - node_modules/
-        - action: rebuild
-          path: package.json
+      # NODE_ENV: development
+      - DATABASE_URL=${DATABASE_URL} # Reads from .env file
+    depends_on:
+      - db
+    command: sh -c "npx prisma migrate deploy && npm run dev"
   db:
     image: postgres:15-alpine
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_USER: whoflopped_user
+      POSTGRES_PASSWORD: 1010
+      POSTGRES_DB: whoflopped_db
     ports:
       - "5432:5432"
