@@ -8,5 +8,11 @@ COPY prisma ./prisma
 RUN npx prisma generate
 
 COPY . .
+
+# Build the app for production
+RUN npm run build
+
 EXPOSE 3000
-CMD npm run dev
+
+# Run the production build
+CMD sh -c "npx prisma migrate deploy && npm run start"
