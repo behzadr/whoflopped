@@ -40,6 +40,3 @@ next-env.d.ts
 
 # Minikube binaries
 minikube*
-
-# SQL Migration Script
-/prisma/migrations/0_init
