@@ -1,14 +1,15 @@
 'use client';
 
 import { useState } from 'react';
+import { useUserContext } from '@/app/context/UserContext';
 
 export default function AddUserForm() {
     const [email, setEmail] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
-
     const [error, setError] = useState<string | null>(null);
+    const { addUser } = useUserContext();
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -27,8 +28,11 @@ export default function AddUserForm() {
                 throw new Error('Failed to create user');
             }
 
-            const data = await response.json();
-            console.log('User created:', data);
+            const newUser = await response.json();
+            console.log('User created:', newUser);
+
+            // Add new user to the global state
+            addUser(newUser);
 
             // Clear the form after successful submission
             setEmail('');
@@ -78,7 +82,7 @@ export default function AddUserForm() {
                 <div>
                     <label htmlFor="name">Password:</label>
                     <input
-                        type="text"
+                        type="password"
                         id="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
