@@ -7,60 +7,51 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert } from '@/components/ui/alert';
 
-const SignInForm: React.FC = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState<string | null>(null);
+const SignInForm = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
-    const handleSignIn = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError('');
+        setError("");
 
         try {
-            const response = await axios.post('/api/auth/signin', {
-                email,
-                password,
-            });
-
-            // Handle success (e.g., redirect user or store token)
-            console.log('Sign in success', response.data);
+            const response = await axios.post("/api/auth/signin", { email, password });
+            // Handle success
         } catch (err) {
-            setError('Invalid email or password');
+            setError("Invalid credentials. Please try again.");
         }
     };
 
     return (
-        <form onSubmit={handleSignIn}>
-            <div className="mb-4">
-                <Label htmlFor="email">Email</Label>
+        <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
                 <Input
                     id="email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    placeholder="Email"
                 />
             </div>
-
-            <div className="mb-4">
-                <Label htmlFor="password">Password</Label>
+            <div className="space-y-2">
                 <Input
                     id="password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    placeholder="Password"
                 />
             </div>
-
-            {error && <Alert className="text-red-500">{error}</Alert>}
-
-            <Button type="submit" className="w-full">
-                Sign In
+            {error && <p className="text-red-500">{error}</p>}
+            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                Log In
             </Button>
         </form>
     );
 };
-
 
 export default SignInForm;
