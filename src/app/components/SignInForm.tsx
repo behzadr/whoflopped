@@ -16,9 +16,14 @@ const SignInForm = () => {
 
         try {
             const response = await axios.post("/api/auth/signin", { email, password });
-            // Handle success
-        } catch (err) {
-            setError("Invalid credentials. Please try again.");
+            localStorage.setItem("token", response.data.token); // Store token
+            window.location.href = "/dashboard"; // Redirect
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err) && err.response?.status === 401) {
+                setError("Invalid credentials. Please try again.");
+            } else {
+                setError("Something went wrong. Please try again later.");
+            }
         }
     };
 
