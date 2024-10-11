@@ -3,14 +3,15 @@
 import React from 'react';
 import Link from 'next/link';
 import SignInForm from "app/components/SignInForm";
+import Header from "@/app/components/Header";
+import Footer from "@/app/components/Footer";
+
 
 export default function LandingPage() {
     return (
         <div className="min-h-screen bg-gradient-to-b from-blue-50 to-sky-100 flex flex-col">
             {/* Header */}
-            <header className="container mx-auto px-4 py-6 flex justify-between items-center">
-                <div className="text-2xl font-bold text-blue-800">WhoFlopped</div>
-            </header>
+            <Header/>
 
             {/* Main Content */}
             <main className="flex-grow container mx-auto px-4 py-12">
@@ -25,7 +26,7 @@ export default function LandingPage() {
                     {/* Sign In Form */}
                     <section className="w-full md:w-1/2 max-w-md">
                         <div className="bg-white p-8 rounded-lg shadow-md">
-                            <SignInForm />
+                            <SignInForm/>
                             <div className="mt-4 text-center">
                                 <Link href="/auth/signup" className="text-blue-600 hover:text-blue-800">
                                     Don’t have an account? Sign up
@@ -37,13 +38,7 @@ export default function LandingPage() {
             </main>
 
             {/* Footer */}
-            <footer className="bg-blue-800 text-white py-5">
-                <div className="container mx-auto px-4">
-                    <div className=" text-center text-sm">
-                        <p>&copy; 2024 WhoFlopped. All rights reserved.</p>
-                    </div>
-                </div>
-            </footer>
+            <Footer/>
         </div>
     );
 }
