@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
 const SignUpForm = () => {
@@ -19,30 +18,10 @@ const SignUpForm = () => {
         }));
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Add your form submission logic here (e.g., call to the API)
-        console.log("Form submitted:", formData);
-
-        try {
-            const response = await fetch("/api/auth/signup", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
-            });
-
-            if (response.ok) {
-                console.log("Sign-up successful!");
-                // Redirect or show success message
-            } else {
-                console.error("Sign-up failed.");
-                // Handle error
-            }
-        } catch (error) {
-            console.error("Error submitting the form:", error);
-        }
+        // Add your form submission logic here, such as calling an API
+        console.log("Form data submitted:", formData);
     };
 
     return (
