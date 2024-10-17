@@ -1,79 +1,87 @@
-import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+"use client";
+
+import React, { useState } from 'react';
+import axios from 'axios';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useRouter } from 'next/navigation';
 
 const SignUpForm = () => {
-    const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: ""
-    });
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [error, setError] = useState("");
+    const router = useRouter();
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value
-        }));
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Add your form submission logic here, such as calling an API
-        console.log("Form data submitted:", formData);
+        setError("");
+        console.log("Form submitted"); // Debugging line
+
+        try {
+            const response = await axios.post("/api/auth/signup", {
+                email,
+                password,
+                firstName,
+                lastName,
+            });
+            localStorage.setItem("token", response.data.token); // Store token
+            router.push('/');
+        } catch (err: unknown) {
+            console.error(err); // Debugging line
+            if (axios.isAxiosError(err) && err.response?.status === 400) {
+                setError("Invalid data. Please check your inputs.");
+            } else {
+                setError("Something went wrong. Please try again later.");
+            }
+        }
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="mb-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
                 <Input
-                    type="text"
                     id="firstName"
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    placeholder="First name"
-                    className="mt-1 block w-full"
-                />
-            </div>
-            <div className="mb-4">
-                <Input
                     type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    required
+                    placeholder="First Name"
+                />
+            </div>
+            <div className="space-y-2">
+                <Input
                     id="lastName"
-                    name="lastName"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    placeholder="Last name"
-                    className="mt-1 block w-full"
+                    type="text"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    required
+                    placeholder="Last Name"
                 />
             </div>
-            <div className="mb-4">
+            <div className="space-y-2">
                 <Input
-                    type="email"
                     id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
                     placeholder="Email"
-                    className="mt-1 block w-full"
                 />
             </div>
-            <div className="mb-6">
+            <div className="space-y-2">
                 <Input
-                    type="password"
                     id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
                     placeholder="Password"
-                    className="mt-1 block w-full"
                 />
             </div>
-            <Button
-                type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
-            >
+            {error && <p className="text-red-500">{error}</p>}
+            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
                 Sign Up
             </Button>
         </form>

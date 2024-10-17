@@ -1,28 +1,37 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useRouter } from 'next/navigation';
 
 const SignInForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const router = useRouter();
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
+        if (isMounted) {
 
-        try {
-            const response = await axios.post("/api/auth/signin", { email, password });
-            localStorage.setItem("token", response.data.token); // Store token
-            window.location.href = "/dashboard"; // Redirect
-        } catch (err: unknown) {
-            if (axios.isAxiosError(err) && err.response?.status === 401) {
-                setError("Invalid credentials. Please try again.");
-            } else {
-                setError("Something went wrong. Please try again later.");
+            try {
+                const response = await axios.post("/api/auth/signin", {email, password});
+                localStorage.setItem("token", response.data.token); // Store token
+                router.push('/');
+            } catch (err: unknown) {
+                if (axios.isAxiosError(err) && err.response?.status === 401) {
+                    setError("Invalid credentials. Please try again.");
+                } else {
+                    setError("Something went wrong. Please try again later.");
+                }
             }
         }
     };
